@@ -30,7 +30,7 @@ class Node:
         self.pref_link: Node = pref_link
 
     def __str__(self):
-        return f"{self.__data}, {self.__next_link}"
+        return f"{self.__data}"
 
     @property
     def data(self):
@@ -86,9 +86,11 @@ class LinkedList:
             self.tail = new_node
             self.len += 1
             return new_node
-        new_node.pref_link = self.head
-        self.head.link = new_node
-
+        new_node.pref_link = self.tail
+        self.tail.link = new_node
+        self.tail = new_node
+        self.len += 1
+        return new_node
 
     def pop(self):
         if self.head is None:
@@ -102,6 +104,11 @@ class LinkedList:
         temp_link.del_link()
         self.tail = temp_link
 
+    def rev_print(self):
+        temp = self.tail
+        for _ in range(self.len):
+            print(temp, end=" ")
+            temp = temp.pref_link
 
     def search(self, v):
         pass
@@ -120,15 +127,9 @@ lst.append(5)
 lst.append(9)
 lst.append("999")
 lst.append("ejfrjeuifj")
-lst.pop()
-print(lst)
-lst.append(15)
-print(lst)
-lst.pop()
-lst.pop()
-lst.pop()
-# lst.pop()
-
+lst.append("322")
+lst.append("rerer")
+lst.rev_print()
 print(lst)
 
 # while True:

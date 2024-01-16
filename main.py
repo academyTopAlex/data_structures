@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 import collections
 import random
+import datetime
 
 # list_of_letters = list('абракадабра')
 # letter_cnt = collections.Counter(list_of_letters)
-# print(letter_cnt["d"])
+# print(letter_cnt["hg"])
 
 # emotion_cnt = collections.Counter({'like':2, 'dislike':3})
 # print(emotion_cnt)#Counter({'like': 2, 'dislike': 3})
@@ -24,13 +25,12 @@ import random
 # {'а': 5, 'б': 2, 'р': 2, 'к': 1, 'д': 1}
 
 
-# d = collections.defaultdict(int)
-# d['name'] = 'James' 
-# d['surname'] = 'Bond'
-# d['patronymic']
-# ''
-# print(d)# defaultdict(str, {'name': 'James', 'surname': 'Bond', 'patronymic': ''})
+d = collections.defaultdict(list)
+d['name'] = 'James'
+d['surname'] = 'Bond'
+d['patronymic']
 
+print(d)# defaultdict(str, {'name': 'James', 'surname': 'Bond', 'patronymic': ''})
 
 
 # OrderedDict
@@ -38,6 +38,7 @@ import random
    popitem(last=True) – удаляет последний элемент если last=True, и первый, если last=False
    move_to_end(key, last=True) – переносит ключ key в конец, если last=True, и в начало, если last=False 
 '''
+
 
 # d = collections.OrderedDict.fromkeys('abcde')
 # print(d)
@@ -52,20 +53,38 @@ import random
 # deque
 
 # Пример компактной и быстрой реализации функции скользящего среднего
-def moving_average(lst:list[int|float], n:int=3) -> list[float]:
-   deque = collections.deque(lst[:3])
-   s = sum(deque)
-   res = [s / n]
+def moving_average(lst: list, n: int = 20_000) -> list[float]:
 
-   for item in lst:
-      s += item - deque.popleft()
-      deque.append(item)
-      res.append(s / n)
-   return res
-(moving_average([random.randint(1,100) for i in range(1_000_000)]))
+    deque = collections.deque(lst[:n])
+    print(deque)
+    s = sum(deque)
+    res = [s / n]
+
+    for i in range(1, len(lst)-n+1):
+        x = deque.popleft()
+        s += lst[i+n-1] - x
+        deque.append(lst[i+n-1])
+        res.append(s / n)
+    return res
+lst = [i for i in range(10_000_000)]
+
+# start = datetime.datetime.now()
+# moving_average(lst) #0:00:03.936512
+# print(datetime.datetime.now() - start)
+
+def moving_average1(lst: list, n: int = 20_000) -> list[float]:
+    res = []
+    for i in range(len(lst)):
+        s = sum(lst[i:i + n])
+        res.append(s / n)
+    return res
+
+# start = datetime.datetime.now()
+# moving_average1(lst)#0:00:00.374997
+# print(datetime.datetime.now() - start)
 
 
-#namedtuple()
+# namedtuple()
 
 
 """
@@ -74,17 +93,19 @@ def moving_average(lst:list[int|float], n:int=3) -> list[float]:
    типам dict, list, str чревато ошибками, связанными с игнорированием переопределения методов).
 """
 
+
 class Test1(ABC):
-   @abstractmethod
-   def foo(seld):
-      pass
+    @abstractmethod
+    def foo(seld):
+        pass
 
 
 class Test2(Test1):
-   # def foo(seld):
-   #    pass
-   def foo1(seld):
-      pass
+    # def foo(seld):
+    #    pass
+    def foo1(seld):
+        pass
 
-t2 = Test2()
-t2.foo1()
+
+# t2 = Test2()
+# t2.foo1()
