@@ -24,12 +24,13 @@
 
 
 class Node:
-    def __init__(self, data, link=None):
+    def __init__(self, data, next_link=None, pref_link=None):
         self.__data = data
-        self.__link: Node = link
+        self.__next_link: Node = next_link
+        self.pref_link: Node = pref_link
 
     def __str__(self):
-        return f"{self.__data}, {self.__link}"
+        return f"{self.__data}, {self.__next_link}"
 
     @property
     def data(self):
@@ -43,16 +44,16 @@ class Node:
 
     @property
     def link(self):
-        return self.__link
+        return self.__next_link
 
     @link.setter
     def link(self, v):
         if not isinstance(v, type(self)):
             raise TypeError("is not Node")
-        self.__link = v
+        self.__next_link = v
 
     def del_link(self):
-        self.__link = None
+        self.__next_link = None
 
 
 # tail = Node(1)
@@ -68,15 +69,26 @@ class LinkedList:
         self.tail: Node = tail
         self.len: int = 0
 
-    def append(self, v) -> Node:
+    # def append(self, v) -> Node:
+    #     new_node = Node(v)
+    #     if self.head is None:
+    #         self.head = new_node
+    #         self.tail = new_node
+    #         self.len += 1
+    #         return new_node
+    #     self.tail.link = new_node
+    #     self.tail = new_node
+
+    def append(self, v):
         new_node = Node(v)
         if self.head is None:
             self.head = new_node
             self.tail = new_node
             self.len += 1
             return new_node
-        self.tail.link = new_node
-        self.tail = new_node
+        new_node.pref_link = self.head
+        self.head.link = new_node
+
 
     def pop(self):
         if self.head is None:
@@ -89,6 +101,7 @@ class LinkedList:
 
         temp_link.del_link()
         self.tail = temp_link
+
 
     def search(self, v):
         pass
@@ -114,6 +127,8 @@ print(lst)
 lst.pop()
 lst.pop()
 lst.pop()
+# lst.pop()
+
 print(lst)
 
 # while True:
